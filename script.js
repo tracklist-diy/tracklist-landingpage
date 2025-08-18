@@ -142,6 +142,35 @@ function initTextAnimation() {
   setTimeout(next, holdDuration);
 }
 
+// Function to match button width to music text
+function matchButtonWidthToMusic() {
+  const musicHeader = document.querySelector('.hero h1');
+  const signUpButton = document.querySelector('.btn-primary');
+  
+  if (musicHeader && signUpButton) {
+    // Create a temporary element to measure just the text
+    const tempElement = document.createElement('span');
+    tempElement.textContent = musicHeader.textContent;
+    tempElement.style.position = 'absolute';
+    tempElement.style.visibility = 'hidden';
+    tempElement.style.whiteSpace = 'nowrap';
+    
+    // Copy the exact styles from the h1
+    const computedStyle = window.getComputedStyle(musicHeader);
+    tempElement.style.fontFamily = computedStyle.fontFamily;
+    tempElement.style.fontSize = computedStyle.fontSize;
+    tempElement.style.fontWeight = computedStyle.fontWeight;
+    tempElement.style.letterSpacing = computedStyle.letterSpacing;
+    tempElement.style.lineHeight = computedStyle.lineHeight;
+    
+    document.body.appendChild(tempElement);
+    const textWidth = tempElement.getBoundingClientRect().width;
+    document.body.removeChild(tempElement);
+    
+    signUpButton.style.width = `${textWidth}px`;
+  }
+}
+
 // Initialize everything when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
   // Initialize animated background
@@ -153,4 +182,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initialize text animation
   initTextAnimation();
+  
+  // Match button width to music text
+  matchButtonWidthToMusic();
+  
+  // Re-match on window resize
+  window.addEventListener('resize', matchButtonWidthToMusic);
 });
