@@ -96,25 +96,6 @@ a { color: inherit; text-decoration: none; }
   text-align: right;
 }
 
-/* ===== Built on Card ===== */
-.built-on-card {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.built-on-text {
-  font-size: 14px;
-  color: var(--muted);
-  font-weight: 500;
-  white-space: nowrap;
-}
-
-.built-on-image {
-  height: 20px;
-  width: auto;
-  object-fit: contain;
-}
 
 /* ===== Hero ===== */
 .hero{
@@ -188,13 +169,32 @@ a { color: inherit; text-decoration: none; }
 /* ===== Footer ===== */
 .footer{
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   color: var(--muted);
   text-align: center;
   user-select: none;
   margin-top: auto;
+}
+
+.built-on {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+}
+
+.built-on-text {
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.at-protocol {
+  color: var(--accent);
+  font-weight: 600;
+  font-family: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
 }
 .bluesky-logo{
   filter: brightness(0) saturate(100%) invert(68%) sepia(84%) saturate(486%) hue-rotate(164deg) brightness(104%) contrast(103%);
