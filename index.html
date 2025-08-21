@@ -32,7 +32,7 @@
       <p id="changing-text" class="changing" aria-live="polite">without limits</p>
 
       <nav class="cta" aria-label="Primary">
-        <a class="btn btn-primary" href="#signup">Sign Up</a>
+        <button class="btn btn-primary" id="signup-btn">Sign Up</button>
       </nav>
     </main>
 
@@ -44,6 +44,30 @@
       </div>
       <div class="copyright">DMT, Inc. © 2025</div>
     </footer>
+  </div>
+
+  <!-- Sign Up Modal -->
+  <div class="modal" id="signup-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Subscribe to updates for tracklist://</h2>
+        <button class="modal-close" id="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-message" id="modal-message"></div>
+        <form id="signup-form">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+          </div>
+          <button type="submit" class="btn btn-primary modal-submit">Sign Up</button>
+        </form>
+      </div>
+    </div>
   </div>
 
   <script src="script.js"></script>

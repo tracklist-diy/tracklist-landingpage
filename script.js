@@ -171,6 +171,111 @@ function matchButtonWidthToMusic() {
   }
 }
 
+// Modal functionality
+function initModal() {
+  const modal = document.getElementById('signup-modal');
+  const signupBtn = document.getElementById('signup-btn');
+  const closeBtn = document.getElementById('modal-close');
+  const form = document.getElementById('signup-form');
+  const messageEl = document.getElementById('modal-message');
+
+  // Show message in modal
+  const showMessage = (text, type = 'success') => {
+    messageEl.textContent = text;
+    messageEl.className = `modal-message ${type} show`;
+  };
+
+  // Hide message
+  const hideMessage = () => {
+    messageEl.className = 'modal-message';
+  };
+
+  // Open modal
+  signupBtn.addEventListener('click', () => {
+    modal.classList.add('show');
+    document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    hideMessage(); // Clear any previous messages
+    // Focus on first input
+    setTimeout(() => {
+      document.getElementById('name').focus();
+    }, 100);
+  });
+
+  // Close modal
+  const closeModal = () => {
+    modal.classList.remove('show');
+    document.body.style.overflow = 'auto';
+    form.reset(); // Clear form
+    hideMessage(); // Clear messages
+  };
+
+  closeBtn.addEventListener('click', closeModal);
+
+  // Close modal when clicking outside
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      closeModal();
+    }
+  });
+
+  // Close modal on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('show')) {
+      closeModal();
+    }
+  });
+
+  // Handle form submission
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const submitBtn = form.querySelector('.modal-submit');
+    
+    // Clear any previous messages
+    hideMessage();
+    
+    // Disable form during submission
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Subscribing...';
+    
+    try {
+      const response = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, email })
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        // Success message in modal
+        showMessage(data.message, 'success');
+        form.reset(); // Clear form on success
+        
+        // Auto-close modal after 3 seconds
+        setTimeout(() => {
+          closeModal();
+        }, 3000);
+      } else {
+        // Error message in modal
+        showMessage(data.error, 'error');
+      }
+      
+    } catch (error) {
+      console.error('Subscription error:', error);
+      showMessage('Network error. Please check your connection and try again.', 'error');
+    } finally {
+      // Re-enable form
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Sign Up';
+    }
+  });
+}
+
 // Initialize everything when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
   // Initialize animated background
@@ -188,4 +293,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Re-match on window resize
   window.addEventListener('resize', matchButtonWidthToMusic);
+  
+  // Initialize modal
+  initModal();
 });
