@@ -18,21 +18,12 @@ mailchimp.setConfig({
 app.use(cors());
 app.use(express.json());
 
-// Serve static files FIRST (CSS, JS, images)
-app.use(express.static('.', {
-  setHeaders: (res, path) => {
-    if (path.endsWith('.css')) {
-      res.setHeader('Content-Type', 'text/css');
-    }
-    if (path.endsWith('.js')) {
-      res.setHeader('Content-Type', 'application/javascript');
-    }
-  }
-}));
+// Serve static files from public directory
+app.use(express.static('public'));
 
 // Serve the main page (only for root)
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // Subscribe endpoint

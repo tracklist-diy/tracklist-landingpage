@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>tracklist :// — music</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Animated Background wOO-->
+  <div class="animated-background" id="animated-background"></div>
+
+  <div class="page">
+    <!-- Header with Built-on Card -->
+    <div class="header-section">
+      <header class="brand" aria-label="tracklist">
+        <span class="tr-wrapper">
+          <span class="tile" aria-hidden="true"></span>
+          <span class="tr-text">tr</span>
+        </span>
+        <span>acklist ://</span>
+      </header>
+      
+    </div>
+
+    <!-- Hero -->
+    <main class="hero">
+      <h1>music</h1>
+      <p id="changing-text" class="changing" aria-live="polite">without limits</p>
+
+      <nav class="cta" aria-label="Primary">
+        <button class="btn btn-primary" id="signup-btn">Sign Up</button>
+      </nav>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="built-on">
+        <span class="built-on-text">Built on</span>
+        <span class="at-protocol">@ AT Protocol</span>
+      </div>
+      <div class="copyright">DMT, Inc. © 2025</div>
+    </footer>
+  </div>
+
+  <!-- Sign Up Modal -->
+  <div class="modal" id="signup-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Subscribe to updates for tracklist://</h2>
+        <button class="modal-close" id="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-message" id="modal-message"></div>
+        <form id="signup-form">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+          </div>
+          <button type="submit" class="btn btn-primary modal-submit">Sign Up</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
