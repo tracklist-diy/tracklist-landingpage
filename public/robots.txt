@@ -1,0 +1,6 @@
+# Allow crawling of main site
+User-agent: *
+Allow: /
+
+# Block SXSW subdomain from search engines
+Disallow: /sxsw/
