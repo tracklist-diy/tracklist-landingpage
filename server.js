@@ -26,6 +26,11 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+// Serve the SXSW subdomain page
+app.get('/sxsw', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'sxsw', 'index.html'));
+});
+
 // Subscribe endpoint
 app.post('/api/subscribe', async (req, res) => {
   const { name, email } = req.body;
