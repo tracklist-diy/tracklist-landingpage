@@ -23,3 +23,8 @@ pids
 # OS generated files
 .DS_Store
 Thumbs.db
+
+# Large video files (served from CDN)
+*.mp4
+*.mov
+*.avi

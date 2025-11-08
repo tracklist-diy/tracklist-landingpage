@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>tracklist :// — SXSW Pitch</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Animated Background -->
+  <div class="animated-background" id="animated-background"></div>
+
+  <div class="page">
+    <!-- Header with Logo -->
+    <div class="header-section">
+      <header class="brand" aria-label="tracklist">
+        <span class="tr-wrapper">
+          <span class="tile" aria-hidden="true"></span>
+          <span class="tr-text">tr</span>
+        </span>
+        <span>acklist ://</span>
+      </header>
+    </div>
+
+    <!-- Password Form (shown initially) -->
+    <main class="hero" id="password-container">
+      <h1>SXSW</h1>
+      <p class="changing">Enter password to view</p>
+
+      <div class="password-form">
+        <input
+          type="password"
+          id="password-input"
+          placeholder="Password"
+          autocomplete="off"
+          class="password-input"
+        />
+        <button class="btn btn-primary" id="password-submit">Enter</button>
+        <p class="error-message" id="error-message"></p>
+      </div>
+    </main>
+
+    <!-- Video Container (hidden until password is correct) -->
+    <main class="hero video-hero" id="video-container" style="display: none;">
+      <div class="video-wrapper">
+        <video id="pitch-video" controls>
+          <source src="https://tracklist.b-cdn.net/sxsw%20pitch.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="built-on">
+        <span class="built-on-text">Built on</span>
+        <span class="at-protocol">@ AT Protocol</span>
+      </div>
+      <div class="copyright">DMT, Inc. © 2025</div>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
