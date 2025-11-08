@@ -48,7 +48,7 @@ function createCircles() {
     "rgba(72, 244, 255, 0.10)", // chip-bg color
   ];
 
-  for (let i = 0; i < 8; i++) {
+  for (let i = 0; i < 3; i++) {
     const circle = document.createElement("div");
     circle.className = "animated-circle";
 
