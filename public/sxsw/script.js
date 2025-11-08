@@ -37,52 +37,93 @@ passwordInput.addEventListener("keypress", (e) => {
   }
 });
 
-// ===== Animated Background =====
-const bg = document.getElementById("animated-background");
+// ===== Animated Background (copied from main page) =====
+const COLOR_SCHEMES = {
+  blue: ['#00A6F4', '#00BCD4', '#0088CC', '#20B2AA', '#4682B4'],
+};
 
-// Generate random circles
-function createCircles() {
-  const colors = [
-    "rgba(0, 212, 230, 0.15)",  // accent teal
-    "rgba(0, 184, 204, 0.12)",  // lighter teal
-    "rgba(72, 244, 255, 0.10)", // chip-bg color
-  ];
+class AnimatedBackground {
+  constructor(container, options = {}) {
+    this.container = container;
+    this.intensity = options.intensity || 'medium';
+    this.colorScheme = options.colorScheme || 'blue';
+    this.circles = [];
+    this.animationFrames = [];
 
-  for (let i = 0; i < 3; i++) {
-    const circle = document.createElement("div");
-    circle.className = "animated-circle";
+    this.reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // Random size, position, color
-    const size = Math.random() * 300 + 100;
-    circle.style.width = size + "px";
-    circle.style.height = size + "px";
-    circle.style.background = colors[Math.floor(Math.random() * colors.length)];
+    this.init();
+  }
 
-    // Random starting position
-    circle.style.left = Math.random() * 100 + "%";
-    circle.style.top = Math.random() * 100 + "%";
+  init() {
+    const circleCount = this.intensity === 'high' ? 6 : this.intensity === 'medium' ? 4 : 3;
+    const colors = COLOR_SCHEMES[this.colorScheme];
 
-    bg.appendChild(circle);
+    for (let i = 0; i < circleCount; i++) {
+      const circle = this.createCircle(colors, i);
+      this.circles.push(circle);
+      this.container.appendChild(circle.element);
 
-    // Animate
-    animateCircle(circle);
+      if (!this.reduceMotion) {
+        setTimeout(() => this.animateCircle(circle), i * 1000);
+      }
+    }
+  }
+
+  createCircle(colors, index) {
+    const element = document.createElement('div');
+    element.className = 'animated-circle';
+
+    const size = 60 + Math.random() * 120;
+    const opacity = 0.15 + Math.random() * 0.15;
+    const color = colors[Math.floor(Math.random() * colors.length)];
+
+    const startX = Math.random() * (window.innerWidth - 200) + 100;
+    const startY = Math.random() * (window.innerHeight - 200) + 100;
+
+    element.style.width = `${size}px`;
+    element.style.height = `${size}px`;
+    element.style.backgroundColor = color;
+    element.style.opacity = opacity;
+    element.style.left = `${startX}px`;
+    element.style.top = `${startY}px`;
+
+    return {
+      element,
+      currentX: startX,
+      currentY: startY,
+      size,
+      opacity,
+      color,
+      id: `circle-${index}`
+    };
+  }
+
+  animateCircle(circle) {
+    if (this.reduceMotion) return;
+
+    const animate = () => {
+      const targetX = Math.random() * (window.innerWidth - 200) + 100;
+      const targetY = Math.random() * (window.innerHeight - 200) + 100;
+
+      const duration = 20000 + Math.random() * 15000;
+
+      circle.element.style.transition = `transform ${duration}ms linear`;
+      circle.element.style.transform = `translate(${targetX - circle.currentX}px, ${targetY - circle.currentY}px)`;
+
+      circle.currentX = targetX;
+      circle.currentY = targetY;
+
+      setTimeout(animate, duration);
+    };
+
+    animate();
   }
 }
 
-function animateCircle(circle) {
-  const duration = (Math.random() * 20 + 15) * 1000; // 15-35s
-  const deltaX = (Math.random() - 0.5) * 300;
-  const deltaY = (Math.random() - 0.5) * 300;
-
-  circle.style.transition = `transform ${duration}ms linear`;
-  circle.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
-
-  // Loop animation
-  setTimeout(() => {
-    circle.style.transition = "none";
-    circle.style.transform = "translate(0, 0)";
-    setTimeout(() => animateCircle(circle), 50);
-  }, duration);
-}
-
-createCircles();
+// Initialize background
+const backgroundContainer = document.getElementById('animated-background');
+new AnimatedBackground(backgroundContainer, {
+  intensity: 'medium',
+  colorScheme: 'blue'
+});
