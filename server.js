@@ -26,47 +26,38 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// HTTP Basic Auth middleware for SXSW (password only, username ignored)
-function basicAuthSXSW(req, res, next) {
-  console.log('SXSW Auth Middleware called');
-  console.log('SXSW_PASSWORD env var:', process.env.SXSW_PASSWORD ? 'SET' : 'NOT SET');
-
-  const authHeader = req.headers.authorization;
-  console.log('Authorization header:', authHeader ? 'Present' : 'Missing');
-
-  if (!authHeader || !authHeader.startsWith('Basic ')) {
-    console.log('No auth header, sending 401');
-    res.setHeader('WWW-Authenticate', 'Basic realm="SXSW Pitch Access"');
-    return res.status(401).send('Authentication required');
-  }
-
-  // Decode base64 credentials
-  const base64Credentials = authHeader.split(' ')[1];
-  const credentials = Buffer.from(base64Credentials, 'base64').toString('ascii');
-  const [username, password] = credentials.split(':');
-
-  // Only check password (username can be anything)
-  const validPassword = process.env.SXSW_PASSWORD;
-
-  console.log('Password match:', password === validPassword);
-
-  if (password === validPassword) {
-    console.log('Auth successful');
-    next(); // Authentication successful
-  } else {
-    console.log('Auth failed');
-    res.setHeader('WWW-Authenticate', 'Basic realm="SXSW Pitch Access"');
-    return res.status(401).send('Invalid credentials');
-  }
-}
-
-// Serve the SXSW subdomain page with Basic Auth
-app.get('/sxsw', basicAuthSXSW, (req, res) => {
+// Serve the SXSW page (no auth on the page itself)
+app.get('/sxsw', (req, res) => {
   res.sendFile(path.join(__dirname, 'private', 'sxsw', 'index.html'));
 });
 
-// Serve SXSW static assets (also behind auth)
-app.use('/sxsw', basicAuthSXSW, express.static(path.join(__dirname, 'private', 'sxsw')));
+// SXSW password verification endpoint (server-side check)
+app.post('/api/sxsw/verify', (req, res) => {
+  const { password } = req.body;
+
+  if (!password) {
+    return res.status(400).json({
+      success: false,
+      error: 'Password is required'
+    });
+  }
+
+  // Check password against environment variable
+  if (password === process.env.SXSW_PASSWORD) {
+    return res.json({
+      success: true,
+      message: 'Access granted'
+    });
+  } else {
+    return res.status(401).json({
+      success: false,
+      error: 'Incorrect password'
+    });
+  }
+});
+
+// Serve SXSW static assets (CSS, JS, SVG - no auth needed for these)
+app.use('/sxsw', express.static(path.join(__dirname, 'private', 'sxsw')));
 
 // Subscribe endpoint
 app.post('/api/subscribe', async (req, res) => {

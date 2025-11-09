@@ -22,8 +22,26 @@
       </header>
     </div>
 
-    <!-- Video Container -->
-    <main class="hero video-hero">
+    <!-- Password Form (shown initially) -->
+    <main class="hero" id="password-container">
+      <h1>SXSW</h1>
+      <p class="changing">Enter password to view</p>
+
+      <div class="password-form">
+        <input
+          type="password"
+          id="password-input"
+          placeholder="Password"
+          autocomplete="off"
+          class="password-input"
+        />
+        <button class="btn btn-primary" id="password-submit">Enter</button>
+        <p class="error-message" id="error-message"></p>
+      </div>
+    </main>
+
+    <!-- Video Container (hidden until password is correct) -->
+    <main class="hero video-hero" id="video-container" style="display: none;">
       <h1>SXSW</h1>
       <div class="video-wrapper" id="video-wrapper">
         <video id="pitch-video" controls>
