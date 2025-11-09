@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// HTTP Basic Auth middleware for SXSW
+// HTTP Basic Auth middleware for SXSW (password only, username ignored)
 function basicAuthSXSW(req, res, next) {
   const authHeader = req.headers.authorization;
 
@@ -40,11 +40,10 @@ function basicAuthSXSW(req, res, next) {
   const credentials = Buffer.from(base64Credentials, 'base64').toString('ascii');
   const [username, password] = credentials.split(':');
 
-  // Check credentials against environment variables
-  const validUsername = process.env.SXSW_USERNAME || 'sxsw';
+  // Only check password (username can be anything)
   const validPassword = process.env.SXSW_PASSWORD;
 
-  if (username === validUsername && password === validPassword) {
+  if (password === validPassword) {
     next(); // Authentication successful
   } else {
     res.setHeader('WWW-Authenticate', 'Basic realm="SXSW Pitch Access"');
