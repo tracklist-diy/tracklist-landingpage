@@ -1,6 +1,28 @@
 // Authentication is handled by HTTP Basic Auth on the server
 // No client-side password checking needed
 
+// ===== Video Play Button =====
+const videoWrapper = document.getElementById('video-wrapper');
+const video = document.getElementById('pitch-video');
+
+// Click anywhere on video wrapper to play
+videoWrapper.addEventListener('click', () => {
+  if (video.paused) {
+    video.play();
+    videoWrapper.classList.add('playing');
+  }
+});
+
+// Hide play button when video starts playing
+video.addEventListener('play', () => {
+  videoWrapper.classList.add('playing');
+});
+
+// Show play button when video is paused
+video.addEventListener('pause', () => {
+  videoWrapper.classList.remove('playing');
+});
+
 // ===== Animated Background (copied from main page) =====
 const COLOR_SCHEMES = {
   blue: ['#00A6F4', '#00BCD4', '#0088CC', '#20B2AA', '#4682B4'],
