@@ -20,6 +20,10 @@
       "dest": "server.js"
     },
     {
+      "src": "/sxsw/(.*)",
+      "dest": "server.js"
+    },
+    {
       "src": "/sxsw",
       "dest": "server.js"
     },
