@@ -76,20 +76,28 @@ const playButton = document.querySelector('.play-button-overlay');
 async function playAndFullscreen() {
   if (video.paused) {
     try {
+      // Start playing first
       await video.play();
 
-      // Request fullscreen
-      if (video.requestFullscreen) {
-        video.requestFullscreen();
-      } else if (video.webkitRequestFullscreen) { // Safari
-        video.webkitRequestFullscreen();
-      } else if (video.mozRequestFullScreen) { // Firefox
-        video.mozRequestFullScreen();
-      } else if (video.msRequestFullscreen) { // IE/Edge
-        video.msRequestFullscreen();
-      }
+      // Small delay to ensure video is playing before fullscreen
+      setTimeout(() => {
+        // Request fullscreen on the video element
+        if (video.requestFullscreen) {
+          video.requestFullscreen().catch(err => {
+            console.log('Fullscreen request failed:', err);
+          });
+        } else if (video.webkitRequestFullscreen) { // Safari
+          video.webkitRequestFullscreen();
+        } else if (video.webkitEnterFullscreen) { // iOS Safari
+          video.webkitEnterFullscreen();
+        } else if (video.mozRequestFullScreen) { // Firefox
+          video.mozRequestFullScreen();
+        } else if (video.msRequestFullscreen) { // IE/Edge
+          video.msRequestFullscreen();
+        }
+      }, 100);
     } catch (error) {
-      console.error('Error playing video or entering fullscreen:', error);
+      console.error('Error playing video:', error);
     }
   }
 }
