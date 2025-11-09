@@ -26,34 +26,35 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Serve the SXSW subdomain page
-app.get('/sxsw', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'sxsw', 'index.html'));
-});
+// HTTP Basic Auth middleware for SXSW
+function basicAuthSXSW(req, res, next) {
+  const authHeader = req.headers.authorization;
 
-// SXSW password verification endpoint
-app.post('/api/sxsw/verify', (req, res) => {
-  const { password } = req.body;
-
-  if (!password) {
-    return res.status(400).json({
-      success: false,
-      error: 'Password is required'
-    });
+  if (!authHeader || !authHeader.startsWith('Basic ')) {
+    res.setHeader('WWW-Authenticate', 'Basic realm="SXSW Pitch Access"');
+    return res.status(401).send('Authentication required');
   }
 
-  // Check password against environment variable
-  if (password === process.env.SXSW_PASSWORD) {
-    return res.json({
-      success: true,
-      message: 'Access granted'
-    });
+  // Decode base64 credentials
+  const base64Credentials = authHeader.split(' ')[1];
+  const credentials = Buffer.from(base64Credentials, 'base64').toString('ascii');
+  const [username, password] = credentials.split(':');
+
+  // Check credentials against environment variables
+  const validUsername = process.env.SXSW_USERNAME || 'sxsw';
+  const validPassword = process.env.SXSW_PASSWORD;
+
+  if (username === validUsername && password === validPassword) {
+    next(); // Authentication successful
   } else {
-    return res.status(401).json({
-      success: false,
-      error: 'Incorrect password'
-    });
+    res.setHeader('WWW-Authenticate', 'Basic realm="SXSW Pitch Access"');
+    return res.status(401).send('Invalid credentials');
   }
+}
+
+// Serve the SXSW subdomain page with Basic Auth
+app.get('/sxsw', basicAuthSXSW, (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'sxsw', 'index.html'));
 });
 
 // Subscribe endpoint
