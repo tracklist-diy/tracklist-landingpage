@@ -1,30 +1,60 @@
-// Password protection
-const PASSWORD = "ReadyLetsGo";
-
+// Password protection - server-side verification
 const passwordInput = document.getElementById("password-input");
 const passwordSubmit = document.getElementById("password-submit");
 const passwordContainer = document.getElementById("password-container");
 const videoContainer = document.getElementById("video-container");
 const errorMessage = document.getElementById("error-message");
 
-function checkPassword() {
-  const enteredPassword = passwordInput.value;
+async function checkPassword() {
+  const enteredPassword = passwordInput.value.trim();
 
-  if (enteredPassword === PASSWORD) {
-    // Correct password - show video
-    passwordContainer.style.display = "none";
-    videoContainer.style.display = "flex";
-  } else {
-    // Wrong password - show error
-    errorMessage.textContent = "Incorrect password";
-    errorMessage.classList.add("show");
-    passwordInput.value = "";
-
-    // Hide error after 3 seconds
-    setTimeout(() => {
-      errorMessage.classList.remove("show");
-    }, 3000);
+  if (!enteredPassword) {
+    showError("Please enter a password");
+    return;
   }
+
+  // Disable input during verification
+  passwordSubmit.disabled = true;
+  passwordSubmit.textContent = "Verifying...";
+
+  try {
+    const response = await fetch('/api/sxsw/verify', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ password: enteredPassword })
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+      // Correct password - show video
+      passwordContainer.style.display = "none";
+      videoContainer.style.display = "flex";
+    } else {
+      // Wrong password - show error
+      showError(data.error || "Incorrect password");
+      passwordInput.value = "";
+    }
+  } catch (error) {
+    console.error('Verification error:', error);
+    showError("Network error. Please try again.");
+  } finally {
+    // Re-enable input
+    passwordSubmit.disabled = false;
+    passwordSubmit.textContent = "Enter";
+  }
+}
+
+function showError(message) {
+  errorMessage.textContent = message;
+  errorMessage.classList.add("show");
+
+  // Hide error after 3 seconds
+  setTimeout(() => {
+    errorMessage.classList.remove("show");
+  }, 3000);
 }
 
 // Submit on button click

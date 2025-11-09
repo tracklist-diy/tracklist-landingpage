@@ -31,6 +31,31 @@ app.get('/sxsw', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'sxsw', 'index.html'));
 });
 
+// SXSW password verification endpoint
+app.post('/api/sxsw/verify', (req, res) => {
+  const { password } = req.body;
+
+  if (!password) {
+    return res.status(400).json({
+      success: false,
+      error: 'Password is required'
+    });
+  }
+
+  // Check password against environment variable
+  if (password === process.env.SXSW_PASSWORD) {
+    return res.json({
+      success: true,
+      message: 'Access granted'
+    });
+  } else {
+    return res.status(401).json({
+      success: false,
+      error: 'Incorrect password'
+    });
+  }
+});
+
 // Subscribe endpoint
 app.post('/api/subscribe', async (req, res) => {
   const { name, email } = req.body;
