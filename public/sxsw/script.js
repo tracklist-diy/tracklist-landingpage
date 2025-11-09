@@ -4,12 +4,22 @@
 // ===== Video Play Button =====
 const videoWrapper = document.getElementById('video-wrapper');
 const video = document.getElementById('pitch-video');
+const playButton = document.querySelector('.play-button-overlay');
+
+// Click on play button to play
+if (playButton) {
+  playButton.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (video.paused) {
+      video.play();
+    }
+  });
+}
 
 // Click anywhere on video wrapper to play
 videoWrapper.addEventListener('click', () => {
   if (video.paused) {
     video.play();
-    videoWrapper.classList.add('playing');
   }
 });
 
