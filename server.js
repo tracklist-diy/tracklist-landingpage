@@ -28,9 +28,14 @@ app.get('/', (req, res) => {
 
 // HTTP Basic Auth middleware for SXSW (password only, username ignored)
 function basicAuthSXSW(req, res, next) {
+  console.log('SXSW Auth Middleware called');
+  console.log('SXSW_PASSWORD env var:', process.env.SXSW_PASSWORD ? 'SET' : 'NOT SET');
+
   const authHeader = req.headers.authorization;
+  console.log('Authorization header:', authHeader ? 'Present' : 'Missing');
 
   if (!authHeader || !authHeader.startsWith('Basic ')) {
+    console.log('No auth header, sending 401');
     res.setHeader('WWW-Authenticate', 'Basic realm="SXSW Pitch Access"');
     return res.status(401).send('Authentication required');
   }
@@ -43,9 +48,13 @@ function basicAuthSXSW(req, res, next) {
   // Only check password (username can be anything)
   const validPassword = process.env.SXSW_PASSWORD;
 
+  console.log('Password match:', password === validPassword);
+
   if (password === validPassword) {
+    console.log('Auth successful');
     next(); // Authentication successful
   } else {
+    console.log('Auth failed');
     res.setHeader('WWW-Authenticate', 'Basic realm="SXSW Pitch Access"');
     return res.status(401).send('Invalid credentials');
   }
