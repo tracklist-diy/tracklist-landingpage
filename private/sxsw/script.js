@@ -72,21 +72,39 @@ const videoWrapper = document.getElementById('video-wrapper');
 const video = document.getElementById('pitch-video');
 const playButton = document.querySelector('.play-button-overlay');
 
-// Click on play button to play
+// Function to play video and enter fullscreen
+async function playAndFullscreen() {
+  if (video.paused) {
+    try {
+      await video.play();
+
+      // Request fullscreen
+      if (video.requestFullscreen) {
+        video.requestFullscreen();
+      } else if (video.webkitRequestFullscreen) { // Safari
+        video.webkitRequestFullscreen();
+      } else if (video.mozRequestFullScreen) { // Firefox
+        video.mozRequestFullScreen();
+      } else if (video.msRequestFullscreen) { // IE/Edge
+        video.msRequestFullscreen();
+      }
+    } catch (error) {
+      console.error('Error playing video or entering fullscreen:', error);
+    }
+  }
+}
+
+// Click on play button to play and fullscreen
 if (playButton) {
   playButton.addEventListener('click', (e) => {
     e.stopPropagation();
-    if (video.paused) {
-      video.play();
-    }
+    playAndFullscreen();
   });
 }
 
-// Click anywhere on video wrapper to play
+// Click anywhere on video wrapper to play and fullscreen
 videoWrapper.addEventListener('click', () => {
-  if (video.paused) {
-    video.play();
-  }
+  playAndFullscreen();
 });
 
 // Hide play button when video starts playing
