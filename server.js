@@ -26,10 +26,8 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Serve the SXSW page (no auth on the page itself)
-app.get('/sxsw', (req, res) => {
-  res.sendFile(path.join(__dirname, 'private', 'sxsw', 'index.html'));
-});
+// Serve SXSW static assets (CSS, JS, SVG)
+app.use('/sxsw', express.static(path.join(__dirname, 'private', 'sxsw')));
 
 // SXSW password verification endpoint (server-side check)
 app.post('/api/sxsw/verify', (req, res) => {
@@ -56,8 +54,10 @@ app.post('/api/sxsw/verify', (req, res) => {
   }
 });
 
-// Serve SXSW static assets (CSS, JS, SVG - no auth needed for these)
-app.use('/sxsw', express.static(path.join(__dirname, 'private', 'sxsw')));
+// Serve the SXSW page (must come after static middleware)
+app.get('/sxsw', (req, res) => {
+  res.sendFile(path.join(__dirname, 'private', 'sxsw', 'index.html'));
+});
 
 // Subscribe endpoint
 app.post('/api/subscribe', async (req, res) => {
