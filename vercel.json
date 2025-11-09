@@ -16,6 +16,10 @@
       "dest": "server.js"
     },
     {
+      "src": "/sxsw",
+      "dest": "server.js"
+    },
+    {
       "src": "/(.*\\.(css|js|png|jpg|jpeg|gif|svg|ico))",
       "dest": "public/$1"
     },
