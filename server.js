@@ -62,8 +62,11 @@ function basicAuthSXSW(req, res, next) {
 
 // Serve the SXSW subdomain page with Basic Auth
 app.get('/sxsw', basicAuthSXSW, (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'sxsw', 'index.html'));
+  res.sendFile(path.join(__dirname, 'private', 'sxsw', 'index.html'));
 });
+
+// Serve SXSW static assets (also behind auth)
+app.use('/sxsw', basicAuthSXSW, express.static(path.join(__dirname, 'private', 'sxsw')));
 
 // Subscribe endpoint
 app.post('/api/subscribe', async (req, res) => {
